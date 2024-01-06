@@ -308,24 +308,18 @@ function isContainNumber(num, digit) {
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
 function getBalanceIndex(arr) {
-  const getSum = (a, fromIndex, toIndex) => {
-    let sum = 0;
-    for (let i = fromIndex; i <= toIndex; i += 1) {
-      sum += a[i];
-    }
-    return sum;
-  };
+  let leftSum = 0;
+  let rightSum = 0;
+  for (let i = 1; i < arr.length; i += 1) {
+    rightSum += arr[i];
+  }
 
-  let iValue = 0;
-  let leftSum = arr[0];
-  let rightSum = getSum(arr, arr.length - 1);
   for (let i = 1; i < arr.length - 1; i += 1) {
-    leftSum += iValue;
-    rightSum -= iValue;
+    leftSum += arr[i - 1];
+    rightSum -= arr[i];
     if (leftSum === rightSum) {
       return i;
     }
-    iValue = arr[i];
   }
 
   return -1;
@@ -352,8 +346,39 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  let counter = 1;
+  let x1 = 0;
+  let y1 = 0;
+  let x2 = size - 1;
+  let y2 = size - 1;
+  const a = [];
+  for (let i = 0; i < size; i += 1) {
+    a[i] = [];
+  }
+  while (x1 <= x2 && y1 <= y2) {
+    for (let i = x1; i <= x2; i += 1) {
+      a[y1][i] = counter;
+      counter += 1;
+    }
+    y1 += 1;
+    for (let i = y1; i <= y2; i += 1) {
+      a[i][x2] = counter;
+      counter += 1;
+    }
+    x2 -= 1;
+    for (let i = x2; i >= x1; i -= 1) {
+      a[y2][i] = counter;
+      counter += 1;
+    }
+    y2 -= 1;
+    for (let i = y2; i >= y1; i -= 1) {
+      a[i][x1] = counter;
+      counter += 1;
+    }
+    x1 += 1;
+  }
+  return a;
 }
 
 /**
@@ -371,8 +396,28 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const m = matrix;
+  const div = Math.trunc(m.length / 2);
+
+  for (let i = 0; i < m.length; i += 1) {
+    for (let j = 0; j < i; j += 1) {
+      const tmp = m[i][j];
+      m[i][j] = m[j][i];
+      m[j][i] = tmp;
+    }
+  }
+
+  for (let i = 0; i < m.length; i += 1) {
+    for (let d = 0; d <= div; d += 1) {
+      const k = m.length - 1 - d;
+      const tmp = m[i][d];
+      m[i][d] = m[i][k];
+      m[i][k] = tmp;
+    }
+  }
+
+  return m;
 }
 
 /**
