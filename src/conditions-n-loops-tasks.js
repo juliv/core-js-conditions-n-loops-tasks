@@ -434,8 +434,49 @@ function rotateMatrix(matrix) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const swap = (items, i1, i2) => {
+    const items2 = items;
+    const temp = items[i1];
+    items2[i1] = items2[i2];
+    items2[i2] = temp;
+  };
+
+  const partition = (items, left, right) => {
+    const pivot = items[Math.floor((right + left) / 2)];
+    let i = left;
+    let j = right;
+    while (i <= j) {
+      while (items[i] < pivot) {
+        i += 1;
+      }
+      while (items[j] > pivot) {
+        j -= 1;
+      }
+      if (i <= j) {
+        swap(items, i, j);
+        i += 1;
+        j -= 1;
+      }
+    }
+    return i;
+  };
+
+  const quickSort = (items, left, right) => {
+    let idx;
+    if (items.length > 1) {
+      idx = partition(items, left, right);
+      if (left < idx - 1) {
+        quickSort(items, left, idx - 1);
+      }
+      if (idx < right) {
+        quickSort(items, idx, right);
+      }
+    }
+    return items;
+  };
+
+  return quickSort(arr, 0, arr.length - 1);
 }
 
 /**
@@ -473,7 +514,8 @@ function shuffleChar(str, iterations) {
   if (shuffled.length < 3) {
     return shuffled;
   }
-  for (let i = 0; i < iterations; i += 1) {
+  const optimizeIterations = iterations % 36;
+  for (let i = 0; i < optimizeIterations; i += 1) {
     shuffled = shuffleCharOne(shuffled);
   }
   return shuffled;
